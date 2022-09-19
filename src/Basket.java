@@ -1,12 +1,13 @@
 import java.io.*;
 
-public class Basket {
+public class Basket implements Serializable {
+    private static final long serialVersion = 1L;
     private String[] products;
     private int[] prices;
     private int[] basket;
 
     public Basket(String[] products, int[] prices) {
-        Basket basket1 = loadFromTxtFile(new File("basket.txt"));
+        Basket basket1 = loadFromBinFile(new File("basket.bin"));
         if (basket1 != null) {
             this.products = basket1.getProducts();
             this.prices = basket1.getPrices();
@@ -86,5 +87,23 @@ public class Basket {
 
     public int[] getBasket() {
         return basket;
+    }
+
+    public void saveBin(File file) {
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(file))) {
+            objectOutputStream.writeObject(this);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Basket loadFromBinFile(File file) {
+        Basket result;
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file))) {
+            result = (Basket) objectInputStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(String.format("Файл отсутствует"));
+        }
+        return result;
     }
 }

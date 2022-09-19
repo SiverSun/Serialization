@@ -16,7 +16,7 @@ public class Main {
             System.out.println("Выберите товар и количество или введите `end`");
             String input = scanner.nextLine();
             if ("end".equals(input)) {
-                basket.saveTxt(new File("basket.txt"));
+                basket.saveBin(new File("basket.bin"));
                 break;
             }
             String[] parts = input.split(" ");
