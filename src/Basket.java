@@ -5,21 +5,17 @@ public class Basket {
     private int[] prices;
     private int[] basket;
 
+   Basket basket1 = loadFromTxtFile(new File("basket.txt"));
+
     public Basket(String[] products, int[] prices) {
-        Basket basket1 = loadFromTxtFile(new File("basket.txt"));
-        if (basket1 != null) {
-            this.products = basket1.getProducts();
-            this.prices = basket1.getPrices();
-            this.basket = basket1.getBasket();
-        } else {
-            this.products = products;
-            this.prices = prices;
-            this.basket = new int[products.length];
-        }
+        this.products = products;
+        this.prices = prices;
+        this.basket = new int[products.length];
+
     }
 
     public Basket(String[] products, int[] prices, int[] basket) {
-        this.products = products;
+      this.products = products;
         this.prices = prices;
         this.basket = basket;
     }
@@ -51,7 +47,7 @@ public class Basket {
         }
     }
 
-    public static Basket loadFromTxtFile(File textFile) {
+    public static Basket loadFromTxtFile(File textFile)  {
         Basket result = null;
         if (textFile.exists() & textFile.length() != 0) {
             try (BufferedReader bufferedReader = new BufferedReader(new FileReader(textFile));) {
