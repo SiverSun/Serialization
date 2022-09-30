@@ -5,7 +5,7 @@ public class Basket {
     private int[] prices;
     private int[] basket;
 
-    Basket basket1 = loadFromTxtFile(new File("basket.txt"));
+    //Basket basket = loadFromTxtFile(new File("basket.txt"));
 
     public Basket(String[] products, int[] prices) {
         this.products = products;
@@ -47,30 +47,29 @@ public class Basket {
         }
     }
 
-    public static Basket loadFromTxtFile(File textFile) {
+    public static Basket loadFromTxtFile() throws Exception {
         Basket result = null;
-        if (textFile.exists() & textFile.length() != 0) {
-            try (BufferedReader bufferedReader = new BufferedReader(new FileReader(textFile));) {
-                int count = 0;
-                int size = 3;
-                String[] products = new String[size];
-                int[] basket = new int[size];
-                int[] prices = new int[size];
-                String read;
-                while ((read = bufferedReader.readLine()) != null) {
-                    String[] strings = read.split(" ");
-                    products[count] = strings[0];
-                    basket[count] = Integer.parseInt(strings[1]);
-                    prices[count] = Integer.parseInt(strings[2]);
-                    count++;
-                }
-                result = new Basket(products, prices, basket);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader("basket.txt"));) {
+            int count = 0;
+            int size = 3;
+            String[] products = new String[size];
+            int[] basket = new int[size];
+            int[] prices = new int[size];
+            String read;
+            while ((read = bufferedReader.readLine()) != null) {
+                String[] strings = read.split(" ");
+                products[count] = strings[0];
+                basket[count] = Integer.parseInt(strings[1]);
+                prices[count] = Integer.parseInt(strings[2]);
+                count++;
             }
+            result = new Basket(products, prices, basket);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         return result;
     }
+
 
     public String[] getProducts() {
         return products;
