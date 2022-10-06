@@ -1,11 +1,12 @@
-import java.io.*;
+import com.google.gson.Gson;
 
-public class Basket {
+import java.io.*;
+import java.util.Scanner;
+
+public class Basket implements Serializable {
     private String[] products;
     private int[] prices;
     private int[] basket;
-
-    //Basket basket = loadFromTxtFile(new File("basket.txt"));
 
     public Basket(String[] products, int[] prices) {
         this.products = products;
@@ -38,7 +39,7 @@ public class Basket {
     }
 
     public void saveTxt(File textFile) throws IOException {
-        try (BufferedWriter out = new BufferedWriter(new FileWriter(textFile))) {
+        try (BufferedWriter out = new BufferedWriter(new FileWriter("basket.json"))) {
             for (int i = 0; i < products.length; i++) {
                 out.write(products[i] + " " + basket[i] + " " + prices[i] + "\r\n");
             }
@@ -49,7 +50,7 @@ public class Basket {
 
     public static Basket loadFromTxtFile() throws Exception {
         Basket result = null;
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader("basket.txt"));) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader("basket.json"));) {
             int count = 0;
             int size = 3;
             String[] products = new String[size];
@@ -81,5 +82,19 @@ public class Basket {
 
     public int[] getBasket() {
         return basket;
+    }
+    public void saveJson(File jsonFile) throws IOException {
+        try (PrintWriter out = new PrintWriter(jsonFile)){
+            Gson gson = new Gson();
+            String json = gson.toJson(this);
+            out.println(json);
+        }
+    }
+    public static Basket loadFromJson(File jsonFile)  throws IOException {
+        try (Scanner scanner = new Scanner(jsonFile)){
+            String json = scanner.nextLine();
+            Gson gson = new Gson();
+            return gson.fromJson(json, Basket.class);
+        }
     }
 }
